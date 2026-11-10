@@ -15,7 +15,7 @@ export const SCENARIOS: Scenario[] = [
     id: "payroll-outage",
     name: "Payroll VPN outage",
     channel: "email",
-    tagline: "A real incident, and a draft that claims more than its sources",
+    tagline: "A site-wide outage, and a draft that claims more than its sources",
     teaches:
       "The knowledge layer end to end: Rerank picks the article for this client and skips the self-serve one as a different case, Compare links the ticket to an open report of the same outage, and Verify catches the draft treating one team as the whole site, then holds it for a human.",
     body: `From: maya.chen@northwind.example

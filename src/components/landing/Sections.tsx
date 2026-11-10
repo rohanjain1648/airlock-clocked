@@ -58,7 +58,7 @@ export function EndpointsSection({ examples }: { examples: Record<string, string
   return (
     <section ref={ref} id="how" className="border-t" style={{ borderColor: "var(--line-soft)", background: "var(--bg-raised)" }}>
       <div id="endpoints" className="mx-auto max-w-[1240px] scroll-mt-16 px-4 py-20 sm:px-6 sm:py-24">
-        <div className="reveal grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
           <h2 className="display font-bold" style={{ fontSize: "clamp(2.2rem, 4.4vw, 3.6rem)", lineHeight: 0.95, color: "var(--text)" }}>
             Ten gates. Each one changes what the agent may do.
           </h2>
@@ -72,7 +72,7 @@ export function EndpointsSection({ examples }: { examples: Record<string, string
         <div className="mt-14 space-y-12">
           {STAGES.map((stage, si) => (
             <div key={stage.group} className="grid gap-5 lg:grid-cols-[260px_minmax(0,1fr)]">
-              <div className="reveal border-t pt-4" style={{ ["--d" as string]: "0ms", borderColor: "var(--line)" }}>
+              <div className="border-t pt-4" style={{ borderColor: "var(--line)" }}>
                 <h3 className="display flex gap-2.5 text-[28px] font-bold leading-[1.02]" style={{ color: "var(--text)" }}>
                   <span style={{ color: GROUP_INK[stage.group] }}>{si + 1}</span>
                   <span>{stage.title}</span>
@@ -90,7 +90,7 @@ export function EndpointsSection({ examples }: { examples: Record<string, string
 
           {/* Pipeline: the tenth endpoint, spanning the width */}
           <div className="grid gap-5 lg:grid-cols-[260px_minmax(0,1fr)]">
-            <div className="reveal border-t pt-4" style={{ borderColor: "var(--line)" }}>
+            <div className="border-t pt-4" style={{ borderColor: "var(--line)" }}>
               <h3 className="display flex gap-2.5 text-[28px] font-bold leading-[1.02]" style={{ color: "var(--text)" }}>
                 <span style={{ color: "var(--text-faint)" }}>+</span>
                 <span>One request for the hot path</span>
@@ -160,10 +160,9 @@ const STAMP = {
 };
 
 export function ScenariosSection({ rows }: { rows: ScenarioRow[] }) {
-  const ref = useReveal<HTMLElement>();
   return (
-    <section ref={ref} id="scenarios" className="mx-auto max-w-[1240px] scroll-mt-16 px-4 py-20 sm:px-6 sm:py-24">
-      <div className="reveal grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
+    <section id="scenarios" className="mx-auto max-w-[1240px] scroll-mt-16 px-4 py-20 sm:px-6 sm:py-24">
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
         <h2 className="display font-bold" style={{ fontSize: "clamp(2.2rem, 4.4vw, 3.6rem)", lineHeight: 0.95, color: "var(--text)" }}>
           Four tickets. Four verdicts.
         </h2>
@@ -173,11 +172,11 @@ export function ScenariosSection({ rows }: { rows: ScenarioRow[] }) {
         </p>
       </div>
       <ol className="mt-12 divide-y border-y" style={{ borderColor: "var(--line)" }}>
-        {rows.map((r, i) => {
+        {rows.map((r) => {
           const Icon = CHANNEL[r.channel];
           const s = STAMP[r.outcome.tone];
           return (
-            <li key={r.id} className="reveal" style={{ borderColor: "var(--line)", ["--d" as string]: `${i * 80}ms` }}>
+            <li key={r.id} style={{ borderColor: "var(--line)" }}>
               <Link
                 href={`/console?s=${r.id}`}
                 className="group/row grid items-center gap-x-5 gap-y-3 py-5 no-underline sm:grid-cols-[auto_minmax(0,1fr)_auto_auto]"
@@ -193,7 +192,11 @@ export function ScenariosSection({ rows }: { rows: ScenarioRow[] }) {
                   className="inline-flex items-center gap-1.5 justify-self-start rounded-md px-2.5 py-1.5 text-[12px] font-semibold"
                   style={{ color: s.ink, background: s.soft, boxShadow: `inset 0 0 0 1px ${s.line}` }}
                 >
-                  <s.Icon size={13} strokeWidth={2.4} aria-hidden />
+                  {r.outcome.tone === "pass" ? (
+                    <s.Icon size={13} strokeWidth={2.4} aria-hidden />
+                  ) : (
+                    <span className="hazard h-3 w-3 shrink-0 rounded-[3px]" aria-hidden />
+                  )}
                   {r.outcome.title}
                 </span>
                 <span className="inline-flex items-center gap-1 text-[13px] font-semibold transition-transform group-hover/row:translate-x-0.5" style={{ color: "var(--text)" }}>
@@ -210,11 +213,10 @@ export function ScenariosSection({ rows }: { rows: ScenarioRow[] }) {
 }
 
 export function ReproduceSection({ evalLine }: { evalLine: string }) {
-  const ref = useReveal<HTMLElement>();
   return (
-    <section ref={ref} id="reproduce" className="scroll-mt-16 border-t" style={{ borderColor: "var(--line-soft)", background: "var(--bg-raised)" }}>
+    <section id="reproduce" className="scroll-mt-16 border-t" style={{ borderColor: "var(--line-soft)", background: "var(--bg-raised)" }}>
       <div className="mx-auto grid max-w-[1240px] gap-10 px-4 py-20 sm:px-6 sm:py-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:items-start">
-        <div className="reveal">
+        <div>
           <h2 className="display font-bold" style={{ fontSize: "clamp(2.2rem, 4.4vw, 3.6rem)", lineHeight: 0.95, color: "var(--text)" }}>
             Run it yourself, with or without a key.
           </h2>
@@ -236,7 +238,7 @@ export function ReproduceSection({ evalLine }: { evalLine: string }) {
             ))}
           </ul>
         </div>
-        <div className="reveal card overflow-hidden" style={{ ["--d" as string]: "120ms", boxShadow: "var(--shadow-md)" }}>
+        <div className="card overflow-hidden" style={{ boxShadow: "var(--shadow-md)" }}>
           <div className="flex items-center gap-2 border-b px-4 py-2.5" style={{ borderColor: "var(--line)" }}>
             <span className="mono text-[11px] font-semibold" style={{ color: "var(--text-faint)" }}>terminal</span>
           </div>

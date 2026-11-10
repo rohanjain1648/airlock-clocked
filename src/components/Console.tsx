@@ -182,7 +182,7 @@ export default function Console({
 
           {result && <DecisionBanner result={result} revealed={revealed} />}
 
-          <div className="board rounded-2xl border p-3 sm:p-4" style={{ borderColor: "var(--line)" }}>
+          <div>
             {!result && !running && !error && <Empty />}
             {!result && error && !running && <Empty quiet />}
             {(running || result) && (
@@ -331,7 +331,7 @@ function TicketPanel({
         </div>
       </div>
       <pre
-        className="mono mt-4 max-h-44 overflow-auto whitespace-pre-wrap rounded-lg p-3.5 text-[12px] leading-relaxed"
+        className="mono mt-4 whitespace-pre-wrap rounded-lg p-3.5 text-[12px] leading-relaxed"
         style={{ background: "var(--bg-sunken)", color: "var(--text)" }}
       >
         {s.body}
@@ -447,6 +447,7 @@ function DecisionBanner({ result, revealed }: { result: TriageOutput; revealed: 
   const title = blocked ? "Automation locked: a human takes this ticket" : held ? "Draft held for human approval" : "Cleared: Aria may resolve and reply";
   return (
     <div className="card overflow-hidden p-0" style={{ borderColor: tone.line }}>
+      {(blocked || held) && <div className="hazard h-2" aria-hidden />}
       <div className="flex items-center gap-3 px-4 py-3" style={{ background: tone.soft }}>
         <span className="ichip is-live" data-anim="lock" style={{ width: 30, height: 30, background: tone.ink, color: "#ffffff" }} aria-hidden>
           <tone.Icon size={15} strokeWidth={2.4} />

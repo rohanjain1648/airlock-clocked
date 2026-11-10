@@ -66,7 +66,8 @@ export const GROUP_INK: Record<Group | "bonus", string> = {
 export const GROUP_FILL: Record<Group | "bonus", string> = {
   safety: "var(--safety-fill)",
   core: "var(--core-fill)",
-  knowledge: "var(--knowledge-fill)",
+  // White text on the bright cyan fill is ~2.9:1, so solid knowledge plates use the ink.
+  knowledge: "var(--knowledge)",
   bonus: "var(--text)",
 };
 export const GROUP_SOFT: Record<Group | "bonus", string> = {

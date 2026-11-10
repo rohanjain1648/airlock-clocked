@@ -111,7 +111,7 @@ export default function Hero({ cases, doors }: { cases: HeroCase[]; doors: reado
           <h1
             id="hero-title"
             className="display font-bold"
-            style={{ fontSize: "clamp(2.7rem, 5.4vw, 4.9rem)", lineHeight: 0.93, color: "var(--text)" }}
+            style={{ fontSize: "clamp(3rem, 6.4vw, 5.6rem)", lineHeight: 0.9, color: "var(--text)" }}
           >
             Nothing reaches the agent unchecked.
           </h1>
