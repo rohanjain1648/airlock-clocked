@@ -1,35 +1,60 @@
 @import "tailwindcss";
 
 /*
-  Airlock — control-room theme. A dark technical surface with a warm paper
-  accent that echoes Clocked's own palette, plus group colors for the three
-  endpoint families: core (amber), safety (red), knowledge (cyan).
+  Airlock — clean-room signage on clinical white.
+  A ticket passes sealed doors; each Clocked verdict decides if a door opens.
+  Group signal colours carry a stable meaning across the product:
+    safety (Protect · Guard · Inspect)    red
+    core (Decide · Extract · Fill)        amber
+    knowledge (Verify · Compare · Rerank) cyan
+  Each colour has an ink value (safe for text on white, >= 4.5:1), a solid
+  signage fill, and a soft wash for tinted surfaces.
 */
 :root {
-  --bg: #0b0e13;
-  --bg-raised: #121722;
-  --bg-sunken: #080a0e;
-  --panel: #151b27;
-  --line: #233044;
-  --line-soft: #1a2331;
-  --text: #e8edf6;
-  --text-dim: #9aa8bd;
-  --text-faint: #5f6e86;
+  --bg: #ffffff;
+  --bg-raised: #f7f8fa;
+  --bg-sunken: #f2f4f7;
+  --panel: #ffffff;
+  --line: #dde2e8;
+  --line-soft: #eaedf1;
+  --text: #0c1116;
+  --text-dim: #46515c;
+  --text-faint: #66717d;
 
-  --core: #f4b740;      /* Decide · Extract · Fill */
-  --core-soft: #4a3b1a;
-  --safety: #ff5d6c;    /* Protect · Guard · Inspect */
-  --safety-soft: #4a1f26;
-  --knowledge: #35d0d8; /* Verify · Compare · Rerank */
-  --knowledge-soft: #124044;
+  --safety: #c8253a;
+  --safety-fill: #d4283b;
+  --safety-soft: #fdecee;
+  --safety-line: #f3c2c8;
 
-  --pass: #46d08a;
-  --block: #ff5d6c;
-  --warn: #f4b740;
-  --info: #7aa2ff;
+  --core: #8f5f00;
+  --core-fill: #f2a900;
+  --core-soft: #fff5d9;
+  --core-line: #f1d79a;
+
+  --knowledge: #067782;
+  --knowledge-fill: #0aa5b2;
+  --knowledge-soft: #e2f5f7;
+  --knowledge-line: #a9dde2;
+
+  --pass: #0f7a44;
+  --pass-soft: #e4f4ea;
+  --block: #c8253a;
+  --warn: #8f5f00;
+  --info: #2c58c4;
+
+  --hazard-a: #f2b705;
+  --hazard-b: #14181d;
+
+  --shadow-sm: 0 1px 2px rgba(12, 17, 22, 0.06), 0 1px 1px rgba(12, 17, 22, 0.04);
+  --shadow-md: 0 6px 18px -6px rgba(12, 17, 22, 0.14), 0 2px 4px rgba(12, 17, 22, 0.05);
+  --shadow-lg: 0 18px 40px -16px rgba(12, 17, 22, 0.22), 0 4px 10px -4px rgba(12, 17, 22, 0.08);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-display: var(--font-barlow-condensed), var(--font-geist-sans), sans-serif;
 }
 
 @theme inline {
@@ -39,6 +64,7 @@
   --color-text: var(--text);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-barlow-condensed);
 }
 
 * {
@@ -50,63 +76,218 @@ html, body {
   margin: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   font-feature-settings: "cv02", "cv03", "cv04";
+  /* Theme the browser surfaces the design does not draw. */
+  accent-color: var(--knowledge);
+  caret-color: var(--knowledge);
 }
 
 ::selection {
-  background: var(--knowledge);
-  color: #06181a;
+  background: var(--knowledge-fill);
+  color: #ffffff;
+}
+
+/* One themed focus ring for every interactive element; no browser default. */
+:focus-visible {
+  outline: 2px solid var(--knowledge);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+/* Tabular, slashed-zero numerals wherever figures are compared. */
+.mono, .tabular-nums {
+  font-variant-numeric: tabular-nums slashed-zero;
+}
+.mono { font-family: var(--font-mono); }
+.display {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
 /* Scrollbars that fit the surface */
 *::-webkit-scrollbar { width: 10px; height: 10px; }
 *::-webkit-scrollbar-track { background: transparent; }
-*::-webkit-scrollbar-thumb { background: var(--line); border-radius: 8px; border: 2px solid var(--bg); }
-*::-webkit-scrollbar-thumb:hover { background: #30415c; }
+*::-webkit-scrollbar-thumb { background: #cfd5dc; border-radius: 8px; border: 2px solid var(--bg); }
+*::-webkit-scrollbar-thumb:hover { background: #b6bec8; }
 
-.mono { font-family: var(--font-mono); }
-
-/* Thin dotted grid used behind the pipeline to read as a "board". */
-.board {
-  background-image:
-    radial-gradient(circle at 1px 1px, rgba(255,255,255,0.045) 1px, transparent 0);
-  background-size: 22px 22px;
-}
-
-@keyframes pulse-ring {
-  0% { box-shadow: 0 0 0 0 rgba(53, 208, 216, 0.35); }
-  70% { box-shadow: 0 0 0 10px rgba(53, 208, 216, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(53, 208, 216, 0); }
-}
-.running { animation: pulse-ring 1.3s ease-out infinite; }
-
-@keyframes slide-up {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.gate-in { animation: slide-up 0.28s ease both; }
-
-@keyframes flow {
-  to { stroke-dashoffset: -16; }
-}
-.flow-line { stroke-dasharray: 4 6; animation: flow 0.9s linear infinite; }
-
+/* Signage plate: the basic surface of the world. */
 .card {
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Hazard stripes: the mark of a sealed door. Only ever on a sealed state. */
+.hazard {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--hazard-a) 0 10px,
+    var(--hazard-b) 10px 20px
+  );
+}
+
+/* Faint registration grid behind the gate board. */
+.board {
+  background-color: var(--bg-raised);
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(12, 17, 22, 0.07) 1px, transparent 0);
+  background-size: 22px 22px;
 }
 
 .tap {
-  transition: border-color 0.15s ease, transform 0.12s ease, background 0.15s ease;
+  transition:
+    border-color 0.18s var(--ease-out),
+    box-shadow 0.18s var(--ease-out),
+    transform 0.18s var(--ease-out),
+    background-color 0.18s var(--ease-out);
 }
-.tap:hover { border-color: #33455f; }
+.tap:hover { border-color: #c3cad3; }
 .tap:active { transform: translateY(1px); }
 
 details > summary { list-style: none; cursor: pointer; }
 details > summary::-webkit-details-marker { display: none; }
+details[open] > summary .chev { transform: rotate(90deg); }
+.chev { transition: transform 0.2s var(--ease-out); }
+
+/* ── Motion ────────────────────────────────────────────────────────────── */
+
+/* Gate rows settle into the board as the run reaches them. */
+@keyframes settle {
+  from { opacity: 0; transform: translateY(8px); filter: blur(2px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+.gate-in { animation: settle 0.45s var(--ease-out) both; }
+
+/* Scroll reveal for landing sections and cards (content visible by default
+   without JS; the script adds .reveal-armed before observing). */
+.reveal-armed .reveal { opacity: 0; transform: translateY(14px); }
+.reveal-armed .reveal.is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+  transition-delay: var(--d, 0ms);
+}
+
+/* "Running" ring on the active gate indicator. */
+@keyframes ring {
+  0% { box-shadow: 0 0 0 0 rgba(6, 119, 130, 0.32); }
+  80% { box-shadow: 0 0 0 9px rgba(6, 119, 130, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(6, 119, 130, 0); }
+}
+.running { animation: ring 1.3s var(--ease-out) infinite; }
+
+/* ── Animated icon chips ───────────────────────────────────────────────── */
+.ichip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 9px;
+  isolation: isolate;
+}
+.ichip svg { position: relative; z-index: 1; }
+
+/* scan: a beam sweeps the chip (Guard, Inspect, Verify, Rerank) */
+.ichip[data-anim="scan"]::after {
+  content: "";
+  position: absolute;
+  inset: -40% 0;
+  background: linear-gradient(180deg, transparent 0%, currentColor 50%, transparent 100%);
+  opacity: 0;
+  transform: translateY(-100%);
+}
+.ichip[data-anim="scan"].is-live::after,
+.group\/chip:hover .ichip[data-anim="scan"]::after,
+.ichip[data-anim="scan"]:hover::after {
+  animation: scan 1.1s var(--ease-in-out) 1;
+}
+.ichip[data-anim="scan"].is-loop::after { animation: scan 1.6s var(--ease-in-out) infinite; }
+@keyframes scan {
+  0% { transform: translateY(-100%); opacity: 0; }
+  20% { opacity: 0.22; }
+  80% { opacity: 0.22; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+
+/* mask: the glyph blinks shut (Protect) */
+.ichip[data-anim="mask"].is-live svg,
+.group\/chip:hover .ichip[data-anim="mask"] svg,
+.ichip[data-anim="mask"]:hover svg { animation: blink 0.9s var(--ease-out) 1; }
+@keyframes blink {
+  0%, 100% { transform: scaleY(1); }
+  35% { transform: scaleY(0.12); }
+  55% { transform: scaleY(1); }
+}
+
+/* stack: the glyph steps through its rows (Extract, Fill, Compare, Pipeline) */
+.ichip[data-anim="stack"].is-live svg,
+.group\/chip:hover .ichip[data-anim="stack"] svg,
+.ichip[data-anim="stack"]:hover svg { animation: nudge 0.8s var(--ease-out) 1; }
+@keyframes nudge {
+  0% { transform: translateX(0); }
+  30% { transform: translateX(-2px); }
+  60% { transform: translateX(2px); }
+  100% { transform: translateX(0); }
+}
+
+/* tilt: the signpost turns (Decide) */
+.ichip[data-anim="tilt"].is-live svg,
+.group\/chip:hover .ichip[data-anim="tilt"] svg,
+.ichip[data-anim="tilt"]:hover svg { animation: tilt 0.9s var(--ease-out) 1; }
+@keyframes tilt {
+  0%, 100% { transform: rotate(0); }
+  30% { transform: rotate(-14deg); }
+  60% { transform: rotate(8deg); }
+}
+
+/* lock: a shackle drops (sealed doors) */
+.ichip[data-anim="lock"].is-live svg { animation: drop 0.5s var(--ease-out) 1; }
+@keyframes drop {
+  0% { transform: translateY(-4px); }
+  60% { transform: translateY(1px); }
+  100% { transform: none; }
+}
+
+/* ── Airlock strip (landing hero) ──────────────────────────────────────── */
+.door-panel {
+  transform-origin: top;
+  transform: scaleY(0);
+  transition: transform 0.55s var(--ease-out);
+}
+.door[data-state="sealed"] .door-panel { transform: scaleY(1); }
+
+.token {
+  transition: left 0.55s var(--ease-out), opacity 0.3s var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal-armed .reveal { opacity: 1; transform: none; }
+}

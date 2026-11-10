@@ -1,6 +1,5 @@
 import "server-only";
 import { callGate, MODE } from "./clocked";
-import { getFixture } from "@/data/fixtures";
 import type { Scenario } from "./types";
 import type { PipelineResponse } from "clocked-sdk";
 
@@ -85,7 +84,7 @@ export async function runFastPath(scenario: Scenario): Promise<FastPathResult> {
         },
       ],
     },
-    fixture: getFixture<PipelineResponse>(`${scenario.id}:pipeline`),
+    fixtureKey: `${scenario.id}:pipeline`,
   });
 
   const p = call.data;

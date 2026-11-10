@@ -42,3 +42,11 @@ next-env.d.ts
 
 # keep the example env (no secrets)
 !.env.example
+
+# Impeccable machine-local and runtime state
+.impeccable/config.local.json
+.impeccable/hook.cache.json
+.impeccable/mocks/
+.codex/
+.cursor/
+.gemini/

@@ -24,9 +24,9 @@ poisoned knowledge-base article before the agent ever reads it
 🕵️ **Protect** masks the only text the agent sees
 🔬 **Inspect** disables the one-click "Run fix" when a script tries to blind
 endpoint security
-🧭 **Rerank + Compare** pick the right-tenant article, cluster a duplicate major
-incident, and suppress a conflicting KB page
-✅ **Verify** catches "your VPN access has been restored" as *contradicted* and
+🧭 **Rerank + Compare** pick the article for this customer's plan and link the
+ticket to an open report of the same outage
+✅ **Verify** catches a draft that claims more than its sources, removes the claim, and
 blocks auto-send — routing the draft to a human
 
 Four real-world scenarios, full claim-level evidence, and a live credit/$ meter.

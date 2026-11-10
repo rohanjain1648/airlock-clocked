@@ -14,8 +14,13 @@ import type {
   RerankResponse,
 } from "clocked-sdk";
 
+type Finding = { a: { quote: string }; b: { quote: string } };
+
+const GROUNDED = new Set(["grounded", "supported"]);
 const VERDICT_COLOR: Record<string, string> = {
   supported: "var(--pass)",
+  grounded: "var(--pass)",
+  partially_grounded: "var(--warn)",
   contradicted: "var(--block)",
   not_stated: "var(--warn)",
   not_a_claim: "var(--text-faint)",
@@ -199,7 +204,9 @@ function CompareView({ d }: { d: CompareResponse }) {
         <span className="mono">pairs: {d.pairs.length}</span>
       </div>
       {d.pairs.map((p, i) => {
-        const finding = p.conflict ?? p.duplicate;
+        // The live API returns per-pair arrays; the SDK types a single finding.
+        const pf = p as unknown as { conflicts?: Finding[]; duplicates?: Finding[]; conflict?: Finding | null; duplicate?: Finding | null };
+        const finding = pf.conflicts?.[0] ?? pf.duplicates?.[0] ?? pf.conflict ?? pf.duplicate ?? null;
         const color = p.relation === "conflicting" ? "var(--block)" : p.relation === "same" ? "var(--warn)" : "var(--text-faint)";
         return (
           <div key={i} className="rounded-lg p-2" style={{ background: "var(--bg-sunken)", border: `1px solid var(--line-soft)` }}>
@@ -252,9 +259,9 @@ function FillView({ d }: { d: FillResponse }) {
 function VerifyView({ d }: { d: GroundingResponse }) {
   return (
     <div className="space-y-2">
-      <Bar label="overall support (weighted)" value={d.grounded} color={d.verdict === "supported" ? "var(--pass)" : "var(--block)"} />
+      <Bar label="overall support (weighted)" value={d.grounded} color={GROUNDED.has(d.verdict) ? "var(--pass)" : "var(--block)"} />
       <div className="flex gap-3 text-[11px]" style={{ color: "var(--text-dim)" }}>
-        <span className="mono">verdict: <b style={{ color: d.verdict === "supported" ? "var(--pass)" : "var(--block)" }}>{d.verdict}</b></span>
+        <span className="mono">verdict: <b style={{ color: GROUNDED.has(d.verdict) ? "var(--pass)" : "var(--block)" }}>{d.verdict.replace(/_/g, " ")}</b></span>
         {d.answers_question !== undefined && <span className="mono">answers question: {(d.answers_question * 100).toFixed(0)}%</span>}
       </div>
       <div className="space-y-1.5">

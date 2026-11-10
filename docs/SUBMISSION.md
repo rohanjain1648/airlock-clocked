@@ -18,19 +18,19 @@ changes what the agent is allowed to do**: Guard locks automation on an injectio
 and drops poisoned knowledge-base passages; Protect masks the only text the agent
 ever sees; Inspect enables or disables the "Run fix" button; Extract/Decide/Fill
 turn a ticket into a routed, drafted record; Rerank picks the right-tenant source;
-Compare clusters duplicate incidents and suppresses conflicting KB articles; and
+Compare links a new ticket to an open report of the same outage; and
 Verify strips an unsupported claim and blocks auto-send. A Pipeline fast path runs
 the screen-and-triage stage as a single call. It is for anyone deploying agentic
 automation on a support desk, an inbox, or any flow that reads untrusted text.
 
 ## Demo
-- Live app: _<your Vercel URL>_ (runs fully in **replay mode** — no key needed)
+- Live app: _<your deployment URL>_ (landing page at `/`, gate board at `/console`; runs with no key by replaying responses recorded from the live API)
 - Walkthrough video: _<optional Loom/YouTube link>_
-- Four built-in scenarios; press **Run Airlock** on each to watch the gates.
+- The landing hero is a working airlock: pick an attack and watch the gates seal. Four tickets on the console; press **Run Airlock** on each to watch every gate live.
 
 ## Repository
 _<your public GitHub URL>_ — public, with development history. README has the
-endpoint→feature map, run instructions (replay + live), and an 18-assertion eval
+endpoint→feature map, run instructions (replay + live), and a 21-assertion eval
 harness (`npm run eval`).
 
 ## Which Clocked endpoints you used, and how their outputs affect the app
@@ -51,9 +51,8 @@ All ten are integrated; each changes behavior (no ignored calls):
   six field types) — the draft the next gate verifies.
 - **Rerank (`/rerank`)** — **use/expand/skip**; a `different_case` skip prevents
   answering from the wrong-tenant article; `expand` fetches the neighbor chunk.
-- **Compare (`/compare`)** — **clusters a duplicate ticket** into one major
-  incident and **flags two conflicting KB articles** so only the authoritative
-  one is cited.
+- **Compare (`/compare`)** — **links a new ticket to an open report of the
+  same outage** (one incident, not two) and flags KB articles that conflict.
 - **Verify (`/grounding`)** — claim-by-claim check; an unsupported claim is
   **stripped and auto-send blocked**, routing to a human.
 - **Pipeline (`/pipeline`)** — the one-call fast path (Protect → Guard(`stop`) →

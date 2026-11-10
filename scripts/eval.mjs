@@ -51,28 +51,31 @@ async function main() {
     check("no reply was sent on ticket state", /held for a human/i.test(r.decision.reply));
   }
 
-  // 2. Payroll — the knowledge layer: Verify blocks, Compare clusters, Rerank picks.
-  console.log("\npayroll-outage — Verify blocks an overstated draft; Compare clusters a duplicate");
+  // 2. Payroll — the knowledge layer: Rerank picks, Compare links, Verify holds.
+  console.log("\npayroll-outage — Rerank picks the right case; Compare links; Verify holds the draft");
   {
     const r = await triage("payroll-outage");
     check("Decide routed to network queue", r.decision.queue === "network");
-    check("Compare found a duplicate ticket (INC-5582)", r.decision.duplicateOf === "INC-5582");
-    const cmp = gate(r, "compare");
-    check("Compare reported at least one conflict", cmp?.data?.conflicts?.length >= 1);
+    check("Decide flagged a major incident", r.decision.majorIncident === true);
+    check("Compare linked this ticket to INC-5582", r.decision.duplicateOf === "INC-5582");
     const rr = gate(r, "rerank");
     check("Rerank skipped a different-case article", rr?.data?.results?.some((x) => x.action === "skip" && x.reason === "different_case"));
     const v = gate(r, "grounding");
-    check("Verify verdict blocks auto-send", v?.status === "block" && r.decision.autoSend === false);
-    check("Verify flagged an unsupported claim", (v?.data?.unsupported_claims?.length ?? 0) >= 1);
+    const removed = (v?.data?.unsupported_claims ?? []).map((i) => v.data.claims[i].claim.replace(/[.!?]+$/, ""));
+    check("Verify holds the draft and blocks auto-send", v?.status === "block" && r.decision.autoSend === false);
+    check("the unsupported claim is removed from the held reply", removed.length >= 1 && removed.every((c) => !r.decision.reply.includes(c)));
   }
 
-  // 3. Printer — Inspect gates the action.
-  console.log("\nprinter-script — Inspect disables the Run-fix action");
+  // 3. Printer — Guard locks automation; Inspect still judges the script for the human.
+  console.log("\nprinter-script — Guard locks automation; Inspect still pins the unsafe line");
   {
     const r = await triage("printer-script");
+    check("Guard locks automation on a 'run this script' request", r.decision.automationAllowed === false);
     const ins = gate(r, "script");
+    check("Inspect still runs for the human reviewer", !!ins);
     check("Inspect verdict is block", ins?.status === "block");
     check("Inspect category is EDR evasion", /EDR|security blinding/i.test(ins?.data?.category ?? ""));
+    check("Inspect pins the Defender line", (ins?.data?.evidence ?? []).some((e) => /DisableRealtimeMonitoring/.test(e.line)));
     check("script is not runnable", r.decision.scriptRunnable === false);
   }
 

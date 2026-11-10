@@ -4,6 +4,7 @@ import {
   ClockedError,
   type ClockedResponse,
 } from "clocked-sdk";
+import { getFixture } from "@/data/fixtures";
 
 /**
  * Server-only Clocked client wrapper.
@@ -84,16 +85,17 @@ export async function callGate<T>(opts: {
   label: string;
   // The request body for the endpoint (typed loosely here; callers pass correct shapes).
   request: Record<string, unknown>;
-  // Replay fixture, already parsed. Required so replay mode works offline.
-  fixture: T;
+  // Key of the recorded response (`scenario:gate`). Loaded lazily, only for
+  // replay mode or an error fallback, so live recording works for new keys.
+  fixtureKey: string;
 }): Promise<GateCall<T>> {
-  const { endpoint, label, request, fixture } = opts;
+  const { endpoint, label, request, fixtureKey } = opts;
 
   if (!client) {
     return {
       endpoint,
       label,
-      data: fixture,
+      data: getFixture<T>(fixtureKey),
       cost: ZERO_COST,
       source: "replay",
     };
@@ -120,10 +122,12 @@ export async function callGate<T>(opts: {
     } else {
       console.error(`[clocked] ${endpoint} unexpected error`, err);
     }
+    // A failed live call falls back to the recorded response when one exists;
+    // otherwise the failure propagates instead of inventing an answer.
     return {
       endpoint,
       label,
-      data: fixture,
+      data: getFixture<T>(fixtureKey),
       cost: { ...ZERO_COST, costBasis: "error-fallback" },
       source: "replay",
     };
