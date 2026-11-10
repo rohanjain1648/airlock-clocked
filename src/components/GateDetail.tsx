@@ -66,7 +66,7 @@ function GuardView({ d }: { d: InjectionResponse }) {
       </div>
       {!!d.evidence?.length && (
         <div className="space-y-1 pt-1">
-          <div className="mono text-[10px] uppercase tracking-wider" style={{ color: "var(--text-faint)" }}>evidence</div>
+          <div className="text-[11.5px] font-semibold" style={{ color: "var(--text-faint)" }}>evidence</div>
           {d.evidence.map((ev, i) => <Evidence key={i} quote={ev.quote} />)}
         </div>
       )}
@@ -88,7 +88,7 @@ function ProtectView({ d }: { d: PiiResponse }) {
       </div>
       {d.anonymized_text && (
         <div>
-          <div className="mono mb-1 text-[10px] uppercase tracking-wider" style={{ color: "var(--text-faint)" }}>masked copy sent downstream</div>
+          <div className="mb-1 text-[11.5px] font-semibold" style={{ color: "var(--text-faint)" }}>masked copy sent downstream</div>
           <pre className="mono whitespace-pre-wrap rounded-lg p-3 text-[11px] leading-relaxed" style={{ background: "var(--bg-sunken)", border: "1px solid var(--line-soft)", color: "var(--text-dim)" }}>
             {highlightPlaceholders(d.anonymized_text)}
           </pre>
@@ -239,7 +239,7 @@ function FillView({ d }: { d: FillResponse }) {
           <div key={k} className={generated ? "rounded-lg p-2" : "flex items-start gap-2 text-[12px]"} style={generated ? { background: "var(--core-soft)", border: "1px solid var(--core)" } : {}}>
             {generated ? (
               <div>
-                <div className="mono mb-1 text-[10px] uppercase tracking-wider" style={{ color: "var(--core)" }}>{k} · generated</div>
+                <div className="mb-1 text-[11.5px] font-semibold" style={{ color: "var(--core)" }}>{k} · generated</div>
                 <div className="text-[12px] leading-relaxed" style={{ color: "var(--text)" }}>{String(f.value)}</div>
               </div>
             ) : (
@@ -301,7 +301,7 @@ function InspectView({ d }: { d: ScriptResponse }) {
       </div>
       {!!d.evidence?.length && (
         <div className="space-y-1 pt-1">
-          <div className="mono text-[10px] uppercase tracking-wider" style={{ color: "var(--text-faint)" }}>offending line</div>
+          <div className="text-[11.5px] font-semibold" style={{ color: "var(--text-faint)" }}>offending line</div>
           {d.evidence.map((ev, i) => <Evidence key={i} quote={ev.line} />)}
         </div>
       )}

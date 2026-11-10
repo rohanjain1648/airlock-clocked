@@ -24,11 +24,11 @@ The gates are not a dashboard over model calls; they are the agent's permission 
 - Built for the Clocked Build Challenge (deadline November 10, 2026, 11:59 p.m. ET). Entry form asks for demo, public repo, endpoint usage, team, awards.
 - Runs in **live** mode with `CLOCKED_API_KEY` (server-side only) or **replay** mode from recorded responses, so anyone can run it with no key.
 - Four scenarios: Payroll VPN outage (knowledge layer), The ticket that resolves itself (prompt injection), The printer fix that blinds security (malicious script), Poisoned knowledge base (retrieved-content attack).
-- An 18-assertion eval harness (`npm run eval`) proves each gate changes the decision.
+- A 21-assertion eval harness (`npm run eval`) proves each gate changes the decision.
 
 ## Capabilities and Constraints
 
-- Next.js 15 App Router, TypeScript, Tailwind v4, official `clocked-sdk` 0.7.0. Routes: `/` (console), `/api/triage`, `/api/fastpath`.
+- Next.js 15 App Router, TypeScript, Tailwind v4, official `clocked-sdk` 0.7.0. Routes: `/` (landing page with a working airlock demo), `/console` (the gate board), `/api/triage`, `/api/fastpath`.
 - Clocked calls run only on the server; keys never reach the browser.
 - No database; state is per request.
 - Terminology: "gate", "Aria" (the agent), "automation locked", "auto-send", "Run fix", "replay mode" / "live API".
@@ -36,14 +36,14 @@ The gates are not a dashboard over model calls; they are the agent's permission 
 ## Brand Commitments
 
 - Name: **Airlock**. Tagline in use: "a trust layer for autonomous agents, built on Clocked."
-- Existing logo mark: a ring with a red core and an amber notch (`Logo` in `src/components/Console.tsx`).
+- Logo mark: a ring with a red core and an amber latch on an ink square (`Mark` in `src/components/chrome.tsx`, favicon `src/app/icon.svg`).
 - Three endpoint groups keep stable identities across the product: Protect · Guard · Inspect (safety), Decide · Extract · Fill (core), Verify · Compare · Rerank (knowledge).
 - User-pinned (2026-11-10): white background across the whole product; animated cards; every emoji replaced by real icons and animated icon chips.
 
 ## Evidence on Hand
 
 - Working app with four scenarios and real gate outputs; recorded fixtures in `src/data/fixtures.ts`; live API key configured locally.
-- Screenshots in `docs/`. 18/18 eval assertions passing.
+- Screenshots in `docs/`. 21/21 eval assertions passing against the live API.
 - All ticket data is fictional and synthetic. There are **no** customers, testimonials, benchmarks, adoption numbers or pricing; none may be invented.
 
 ## Product Principles

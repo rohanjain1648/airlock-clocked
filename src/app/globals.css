@@ -92,7 +92,7 @@ body {
 }
 
 ::selection {
-  background: var(--knowledge-fill);
+  background: var(--knowledge);
   color: #ffffff;
 }
 

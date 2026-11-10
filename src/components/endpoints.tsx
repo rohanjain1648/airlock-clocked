@@ -125,7 +125,8 @@ export function IconChip({
       style={{
         width: size,
         height: size,
-        color: solid ? "#ffffff" : ink,
+        // Core plates carry ink: white on the amber fill is ~2:1.
+        color: solid ? (group === "core" ? "var(--text)" : "#ffffff") : ink,
         background: solid ? GROUP_FILL[group] : GROUP_SOFT[group],
         boxShadow: solid ? "none" : `inset 0 0 0 1px ${GROUP_LINE[group]}`,
       }}
